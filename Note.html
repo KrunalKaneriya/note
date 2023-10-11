@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="angular.js"></script>
+    <script src="ToDoController.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <title>To Do List</title>
+</head>
+
+<body ng-app="toDoApp" ng-controller="toDoCtrl">
+    <h2 align="center">To Do List</h2>
+    <div class="jumbotron">
+        <form ng-submit="addNote()">
+            <label for="taskId">
+                Task Id :
+            </label>
+            <input type="text" name="taskId" placeholder="Enter Id" ng-model="newNote.id" />
+            <label for="taskName">
+                Task Name :
+            </label>
+            <input type="text" name="taskName" placeholder="Enter Name" ng-model="newNote.name" />
+            <label for="taskStatus">
+                Task Status :
+            </label>
+            <input type="text" name="taskStatus" placeholder="Enter Status" ng-model="newNote.status" />
+            <button type="submit">
+                Add Note
+            </button>
+        </form>
+
+        <br><br>
+        <label for="searchBox">
+            Search Task by Name:
+        </label>
+        <input type="text" class="form-control" ng-model="searchText" placeholder="Search tasks"><br>
+        <label>Sort by Task Name:</label>
+        <!-- <input type="radio" ng-model="sortType" value="name"> Ascending
+        <input type="radio" ng-model="sortType" value="-name"> Descending<br><br> -->
+        <label for="selection">
+            Select Status :
+        </label>
+        <select name="selection">
+            <option value="{{i}}">All</option>
+            <option ng-repeat="note in uniqueStatuses(toDoNotes)" value="{{ note }}">{{ note }}</option>
+        </select>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                Task Id
+            </th>
+            <th>
+                Task Name
+            </th>
+            <th>
+                Task Status
+            </th>
+        </tr>
+
+        <tr
+            ng-repeat="i in  filteredTasks = (toDoNotes | filter: searchText | filter: selectStatus | orderBy: sortType)">
+            <td>{{i.id}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.status}}</td>
+            <td><input type="text" ng-model="i.name" ng-disabled="!i.editing"></td>
+            <td><input type="text" ng-model="i.status" ng-disabled="!i.editing"></td>
+            <td>
+                <button ng-click="updateNote(i)" ng-disabled="i.editing">Edit</button>
+                <button ng-click="saveNote(i)" ng-disabled="!i.editing">Save</button>
+                <button ng-click="deleteNote(i)">Delete</button>
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>
